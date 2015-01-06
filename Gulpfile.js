@@ -29,11 +29,11 @@ gulp.task('clean', function(done) {
 
 gulp.task('build_gh-pages', build.ghpages);
 
-gulp.task('build_bower', function(done){
+gulp.task('build_package', function(done){
   build.bower(done, cm.public.bowerData);
 });
 
-gulp.task('build_subbower', function(done){
+gulp.task('build_subpackage', function(done){
   var moduleNames = Object.keys(cm.public.subcomponents);
   var almostDone = cm._.after(moduleNames.length, done);
   for (var i = 0, n = moduleNames.length; i < n ; i++){
@@ -55,7 +55,7 @@ gulp.task('publish_gh-pages', function(cb){
   }
 });
 
-gulp.task('publish_bower', function(cb){
+gulp.task('publish_package', function(cb){
   if (process.env.TRAVIS){
     publish.apply(this, [
     {
@@ -67,15 +67,15 @@ gulp.task('publish_bower', function(cb){
   }
 });
 
-gulp.task('publish_subbower', function(done){
+gulp.task('publish_subpackage', function(done){
   var moduleNames = Object.keys(cm.public.subcomponents);
   var almostDone = cm._.after(moduleNames.length, done);
   for (var i = 0, n = moduleNames.length; i < n ; i++){
     var mName = moduleNames[i];
     publish.apply(this, [{
-      branch: 'bower-' + mName,
-      cloneLocation: path.resolve(path.join(process.cwd(), cm.PUBLISH_DIR, 'subbower', mName)),
-      dirSrc: path.resolve(path.join(process.cwd(), cm.BUILD_DIR, 'subbower', mName)),
+      branch: 'npm-' + mName,
+      cloneLocation: path.resolve(path.join(process.cwd(), cm.PUBLISH_DIR, 'subpackage', mName)),
+      dirSrc: path.resolve(path.join(process.cwd(), cm.BUILD_DIR, 'subpackage', mName)),
       message: 'Travis commit : build ' + process.env.TRAVIS_BUILD_NUMBER,
       push: allowPushOnRepo && /^src\d+\.\d+\.\d+.*$/.test(process.env.TRAVIS_BRANCH),
       tag: mName + '-' + cm.pkg.version
